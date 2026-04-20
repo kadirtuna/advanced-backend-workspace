@@ -3,19 +3,17 @@ package com.homework.payment.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-/**
- * Domain entity representing a payment record.
- * Persistence Layer — maps directly to the "payments" table in PostgreSQL.
- */
 @Entity
 @Table(name = "payments")
-@Data
+@Getter
+@Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -34,25 +32,13 @@ public class Payment {
     @Column(nullable = false, length = 3)
     private String currency;
 
-    /**
-     * Payment status: PENDING | SUCCESS | FAILED
-     */
     @Column(nullable = false)
     private String status;
 
-    /**
-     * Unique transaction ID generated during processing.
-     */
     @Column(unique = true)
     private String transactionId;
 
     private String description;
-
-    /**
-     * Method-specific metadata stored as JSON string (e.g. masked card number).
-     */
-    @Column(columnDefinition = "TEXT")
-    private String metadata;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;

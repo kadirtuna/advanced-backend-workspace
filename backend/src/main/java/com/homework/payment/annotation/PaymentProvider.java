@@ -10,13 +10,16 @@ import java.lang.annotation.Target;
  * The registry scans for this annotation at startup using reflection
  * and automatically registers any class that has it.
  *
- * To add a new payment method, just implement PaymentStrategy and put this annotation on it.
+ * To add a new payment method, just implement PaymentStrategy and put this
+ * annotation on it.
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 public @interface PaymentProvider {
 
-    String name();        // e.g. "CREDIT_CARD"
-    String displayName(); // e.g. "Credit Card"
+    String name(); // like "CREDIT_CARD"
+
+    String displayName(); // like "Credit Card"
+
     String description() default "";
 }

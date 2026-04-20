@@ -6,7 +6,7 @@ import com.homework.payment.dto.PaymentResponseDTO;
 /**
  * Base class for the Chain of Responsibility pattern.
  * Each handler does its own job and passes the request to the next one if everything is fine.
- * Chain order: ValidationHandler -> FraudDetectionHandler -> PaymentProcessingHandler
+ * Chain order: ValidationHandler -> PaymentProcessingHandler
  */
 public abstract class PaymentHandler {
 

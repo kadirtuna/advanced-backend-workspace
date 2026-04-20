@@ -13,10 +13,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Centralized exception handling for the API layer.
- * Converts exceptions into consistent JSON error responses.
- *
- * SRP: This class is solely responsible for translating exceptions to HTTP responses.
+ * Catches exceptions thrown anywhere in the app and returns consistent JSON error responses.
  */
 @Slf4j
 @RestControllerAdvice

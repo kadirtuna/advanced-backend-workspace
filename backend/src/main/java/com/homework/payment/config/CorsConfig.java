@@ -8,10 +8,7 @@ import org.springframework.web.filter.CorsFilter;
 
 import java.util.List;
 
-/**
- * CORS configuration to allow the Next.js frontend (localhost:3000)
- * to communicate with the Spring Boot backend (localhost:8080).
- */
+// allows the frontend on port 3000 to call the backend on port 8080
 @Configuration
 public class CorsConfig {
 

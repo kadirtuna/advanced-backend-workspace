@@ -10,6 +10,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -26,7 +27,7 @@ public class PaymentStrategyRegistry {
     private final ApplicationContext applicationContext;
 
     private final Map<String, PaymentStrategy> strategyMap = new ConcurrentHashMap<>();
-    private final List<PaymentMethodInfoDTO> availableProviders = new ArrayList<>();
+    private final List<PaymentMethodInfoDTO> availableProviders = new ArrayList<>(); // guarded by @PostConstruct (single-threaded startup)
 
     public PaymentStrategyRegistry(ApplicationContext applicationContext) {
         this.applicationContext = applicationContext;
@@ -90,7 +91,7 @@ public class PaymentStrategyRegistry {
     }
 
     public List<PaymentMethodInfoDTO> getAvailableProviders() {
-        return List.copyOf(availableProviders);
+        return Collections.unmodifiableList(availableProviders);
     }
 
     public boolean isSupported(String providerName) {
