@@ -4,41 +4,27 @@ import com.homework.payment.dto.PaymentRequestDTO;
 import com.homework.payment.dto.PaymentResponseDTO;
 
 /**
- * Abstract base class for the Chain of Responsibility pattern.
- *
- * Each concrete handler:
- *   1. Implements the doHandle() method with its own logic.
- *   2. Calls handle() on the next handler if processing should continue.
- *
- * Chain order:  ValidationHandler → FraudDetectionHandler → PaymentProcessingHandler
- *
- * SOLID — Single Responsibility Principle (SRP):
- *   Each handler has exactly one responsibility (validate, detect fraud, or process).
- *
- * SOLID — Open/Closed Principle (OCP):
- *   New steps (e.g. LoggingHandler, RateLimitHandler) can be inserted
- *   without changing existing handlers.
+ * Base class for the Chain of Responsibility pattern.
+ * Each handler does its own job and passes the request to the next one if everything is fine.
+ * Chain order: ValidationHandler -> FraudDetectionHandler -> PaymentProcessingHandler
  */
 public abstract class PaymentHandler {
 
     private PaymentHandler next;
 
-    /**
-     * Sets the next handler in the chain and returns it (for fluent chaining).
-     */
+    // returns next so we can chain: a.setNext(b).setNext(c)
     public PaymentHandler setNext(PaymentHandler next) {
         this.next = next;
         return next;
     }
 
     /**
-     * Entry point: run this handler's logic, then pass to the next if successful.
+     * Runs this handler, then forwards to the next one if successful.
      */
     public final PaymentResponseDTO handle(PaymentRequestDTO request) {
         PaymentResponseDTO result = doHandle(request);
 
         if (!result.isSuccess()) {
-            // Chain is broken — return the failure immediately
             return result;
         }
 
@@ -49,11 +35,6 @@ public abstract class PaymentHandler {
         return result;
     }
 
-    /**
-     * Concrete handlers implement their specific processing step here.
-     *
-     * @return a response with success=true to continue the chain,
-     *         or success=false to halt it with an error.
-     */
+    // return success=false to stop the chain, success=true to continue
     protected abstract PaymentResponseDTO doHandle(PaymentRequestDTO request);
 }

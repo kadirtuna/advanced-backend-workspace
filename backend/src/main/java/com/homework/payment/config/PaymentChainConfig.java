@@ -8,17 +8,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 /**
- * Wires the Chain of Responsibility at application startup.
- *
- * Chain order:
- *   ValidationHandler → FraudDetectionHandler → PaymentProcessingHandler
- *
- * The chain head is exposed as a Spring @Bean so that PaymentServiceImpl
- * depends on the abstraction (PaymentHandler), not on concrete handlers.
- * This satisfies the Dependency Inversion Principle (DIP).
- *
- * To add a new step (e.g. RateLimitHandler), insert it here — no other
- * configuration or class needs to change.
+ * Builds the handler chain and exposes it as a bean.
+ * Order: Validation -> FraudDetection -> Processing
  */
 @Configuration
 public class PaymentChainConfig {
@@ -29,11 +20,10 @@ public class PaymentChainConfig {
             FraudDetectionHandler fraudDetectionHandler,
             PaymentProcessingHandler paymentProcessingHandler
     ) {
-        // Build the chain: Validation → FraudDetection → Processing
         validationHandler
                 .setNext(fraudDetectionHandler)
                 .setNext(paymentProcessingHandler);
 
-        return validationHandler; // return the head of the chain
+        return validationHandler;
     }
 }

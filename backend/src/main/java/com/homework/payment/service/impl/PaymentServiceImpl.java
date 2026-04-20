@@ -16,25 +16,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 /**
- * Business Logic Layer implementation.
- *
- * Orchestrates the payment flow:
- *   1. Passes the request to the head of the Chain of Responsibility.
- *   2. If successful, persists the Payment entity to PostgreSQL.
- *   3. Returns the result DTO to the controller.
- *
- * SOLID — Single Responsibility Principle (SRP):
- *   Business logic coordination only; no HTTP, no SQL, no payment execution.
- *
- * SOLID — Dependency Inversion Principle (DIP):
- *   Depends on PaymentHandler (abstract) and PaymentService (interface),
- *   not on concrete chain handlers or strategy classes.
+ * Runs the payment through the chain, then saves the result to the database.
  */
 @Slf4j
 @Service
 public class PaymentServiceImpl implements PaymentService {
 
-    private final PaymentHandler paymentChain;          // Head of the CoR chain
+    private final PaymentHandler paymentChain;
     private final PaymentRepository paymentRepository;
     private final PaymentStrategyRegistry registry;
 
@@ -54,11 +42,9 @@ public class PaymentServiceImpl implements PaymentService {
         log.info("PaymentService: Starting payment flow for method={}, amount={} {}",
                 request.getPaymentMethod(), request.getAmount(), request.getCurrency());
 
-        // Pass through the full Chain of Responsibility:
-        // Validation → Fraud Detection → Payment Processing
         PaymentResponseDTO result = paymentChain.handle(request);
 
-        // Persist the outcome regardless of success/failure
+        // save to DB regardless of whether it succeeded or failed
         Payment payment = Payment.builder()
                 .paymentMethod(request.getPaymentMethod())
                 .amount(request.getAmount())

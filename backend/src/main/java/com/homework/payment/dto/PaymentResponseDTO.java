@@ -9,8 +9,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 /**
- * Data Transfer Object for payment responses.
- * Carries the result back to the presentation layer.
+ * Returned to the frontend after a payment attempt.
  */
 @Data
 @Builder
@@ -24,19 +23,12 @@ public class PaymentResponseDTO {
     private BigDecimal amount;
     private String currency;
 
-    /**
-     * Outcome: SUCCESS | FAILED | PENDING
-     */
-    private String status;
-
+    private String status; // SUCCESS | FAILED | PENDING
     private String message;
     private String description;
     private LocalDateTime createdAt;
 
-    /**
-     * Used internally by the Chain of Responsibility to indicate
-     * whether the current step succeeded and processing should continue.
-     */
+    // used inside the chain to decide whether to continue to the next handler
     private boolean success;
 
     public static PaymentResponseDTO failure(String message) {

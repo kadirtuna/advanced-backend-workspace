@@ -9,14 +9,8 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 
 /**
- * Chain Step 1 — Input Validation.
- *
- * Validates that the payment request is complete and coherent:
- * - Required fields are present
- * - Amount is positive and within limits
- * - Payment method is registered in the system
- *
- * SRP: This handler's sole responsibility is request validation.
+ * Chain Step 1 - validates the request before anything else happens.
+ * Checks the payment method is supported, amount is valid, etc.
  */
 @Slf4j
 @Component
@@ -35,7 +29,6 @@ public class ValidationHandler extends PaymentHandler {
         log.info("[Chain Step 1] Validating payment request — method: {}, amount: {} {}",
                 request.getPaymentMethod(), request.getAmount(), request.getCurrency());
 
-        // Validate payment method is registered
         if (!registry.isSupported(request.getPaymentMethod())) {
             log.warn("Validation failed: unsupported payment method '{}'", request.getPaymentMethod());
             return PaymentResponseDTO.failure(
@@ -43,7 +36,6 @@ public class ValidationHandler extends PaymentHandler {
             );
         }
 
-        // Validate amount
         if (request.getAmount() == null || request.getAmount().compareTo(BigDecimal.ZERO) <= 0) {
             log.warn("Validation failed: invalid amount {}", request.getAmount());
             return PaymentResponseDTO.failure("Payment amount must be greater than zero.");

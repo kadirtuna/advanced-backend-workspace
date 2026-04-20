@@ -10,15 +10,9 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * NEW payment method — PayPal.
- *
- * This class was added to the system WITHOUT modifying any existing code.
- * The @PaymentProvider annotation is all that is needed for automatic
- * discovery via Java Reflection in PaymentStrategyRegistry.
- *
- * This is the Open/Closed Principle in action:
- *   Open for extension (new class added),
- *   Closed for modification (no existing class changed).
+ * Handles PayPal payments.
+ * Added without touching any existing class - just implementing the interface
+ * and putting @PaymentProvider on it was enough.
  */
 @Slf4j
 @Component
@@ -36,7 +30,6 @@ public class PayPalPaymentStrategy implements PaymentStrategy {
         Map<String, String> details = request.getPaymentDetails();
         String email = details != null ? details.getOrDefault("email", "unknown@paypal.com") : "unknown@paypal.com";
 
-        // Simulate PayPal API call
         String transactionId = "PP-" + UUID.randomUUID().toString().replace("-", "").substring(0, 12).toUpperCase();
 
         log.info("PayPal payment successful. TxID: {}, Account: {}", transactionId, maskEmail(email));

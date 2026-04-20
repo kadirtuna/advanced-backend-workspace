@@ -10,13 +10,8 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * EXISTING payment method — Credit Card.
- *
- * Annotated with @PaymentProvider so the PaymentStrategyRegistry
- * discovers and registers it automatically via Java Reflection.
- *
- * SOLID — Single Responsibility Principle (SRP):
- *   This class is responsible solely for credit card payment processing.
+ * Handles credit card payments.
+ * Picked up automatically by the registry because of the @PaymentProvider annotation.
  */
 @Slf4j
 @Component
@@ -35,7 +30,6 @@ public class CreditCardPaymentStrategy implements PaymentStrategy {
         String cardNumber = details != null ? details.getOrDefault("cardNumber", "") : "";
         String maskedCard = maskCardNumber(cardNumber);
 
-        // Simulate payment gateway call
         String transactionId = "CC-" + UUID.randomUUID().toString().replace("-", "").substring(0, 12).toUpperCase();
 
         log.info("Credit Card payment successful. TxID: {}, Card: {}", transactionId, maskedCard);

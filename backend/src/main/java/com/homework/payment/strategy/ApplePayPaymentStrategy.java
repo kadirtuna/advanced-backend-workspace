@@ -10,13 +10,8 @@ import java.util.Map;
 import java.util.UUID;
 
 /**
- * NEW payment method — Apple Pay.
- *
- * Like PayPalPaymentStrategy, this was added WITHOUT changing any existing code.
- * The registry discovers it automatically via Reflection at startup.
- *
- * Demonstrates the system's extensibility: three payment methods,
- * all discovered and registered through one unified mechanism.
+ * Handles Apple Pay payments.
+ * Same as the others - just @PaymentProvider and implementing the interface.
  */
 @Slf4j
 @Component
@@ -34,7 +29,6 @@ public class ApplePayPaymentStrategy implements PaymentStrategy {
         Map<String, String> details = request.getPaymentDetails();
         String deviceId = details != null ? details.getOrDefault("deviceId", "unknown-device") : "unknown-device";
 
-        // Simulate Apple Pay token validation and processing
         String transactionId = "AP-" + UUID.randomUUID().toString().replace("-", "").substring(0, 12).toUpperCase();
 
         log.info("Apple Pay payment successful. TxID: {}, Device: {}", transactionId, maskDeviceId(deviceId));

@@ -13,8 +13,7 @@ import java.math.BigDecimal;
 import java.util.Map;
 
 /**
- * Data Transfer Object for incoming payment requests.
- * Keeps the presentation layer decoupled from the domain entity.
+ * What the frontend sends when the user submits a payment.
  */
 @Data
 @Builder
@@ -22,10 +21,6 @@ import java.util.Map;
 @AllArgsConstructor
 public class PaymentRequestDTO {
 
-    /**
-     * Payment method identifier (e.g. "CREDIT_CARD", "PAYPAL", "APPLE_PAY").
-     * Must match a registered @PaymentProvider name.
-     */
     @NotBlank(message = "Payment method is required")
     private String paymentMethod;
 
@@ -39,12 +34,6 @@ public class PaymentRequestDTO {
 
     private String description;
 
-    /**
-     * Method-specific details supplied by the client.
-     * Examples:
-     *   CREDIT_CARD: { cardNumber, cardHolderName, expiryDate, cvv }
-     *   PAYPAL:      { email }
-     *   APPLE_PAY:   { deviceId, token }
-     */
+    // method-specific fields, e.g. cardNumber for credit card, email for PayPal
     private Map<String, String> paymentDetails;
 }
