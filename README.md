@@ -1,6 +1,6 @@
 # Advanced Backend Workspace
 
-N11 Backend Bootcamp ödevlerini içeren full-stack Java/Next.js proje workspace'i.
+Full-stack Java/Next.js projelerini içeren backend workspace'i.
 
 ---
 
@@ -15,5 +15,3 @@ N11 Backend Bootcamp ödevlerini içeren full-stack Java/Next.js proje workspace
 ## Yazar
 
 **Kadir Tuna** · Software Engineer
-
-> N11 Backend Bootcamp
