@@ -1,6 +1,3 @@
-# Maven build output
-backend/target/
-
 # macOS
 .DS_Store
 **/.DS_Store
