@@ -228,6 +228,27 @@ curl -s -X POST http://localhost:8083/token \
 }
 ```
 
+### Example: Login with Refresh Token
+
+Access token süresi dolduğunda mevcut refresh token ile yeni bir token çifti alınır:
+
+```bash
+curl -s -X POST http://localhost:8083/token \
+  -H "Content-Type: application/json" \
+  -d '{"grant_type":"refresh_token","refresh_token":"<refresh_token>"}'
+```
+
+```json
+{
+  "access_token": "eyJhbGciOiJIUzI1NiJ9...",
+  "refresh_token": "eyJhbGciOiJIUzI1NiJ9...",
+  "token_type": "Bearer",
+  "expires_in": 60
+}
+```
+
+Her yenilemede hem access hem refresh token döner (token rotation). Refresh token'ın süresi de dolmuşsa `401` döner ve kullanıcının tekrar `grant_type: password` ile giriş yapması gerekir.
+
 ### Example: Protected Endpoint
 
 ```bash
