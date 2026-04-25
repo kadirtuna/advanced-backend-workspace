@@ -1,10 +1,10 @@
-# JWT Kimlik Doğrulama Örneği
+# JWT Authentication Example
 
 Access token + refresh token çiftini, token rotation'ı ve otomatik yenilemeyi gösteren full-stack bir JWT kimlik doğrulama uygulaması. Spring Boot 3 backend ve Next.js 15 frontend'den oluşur.
 
 ---
 
-## Teknoloji Yığını
+## Tech Stack
 
 ![Java](https://img.shields.io/badge/Java-21-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)
 ![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.5-6DB33F?style=for-the-badge&logo=springboot&logoColor=white)
@@ -17,7 +17,7 @@ Access token + refresh token çiftini, token rotation'ı ve otomatik yenilemeyi 
 
 ---
 
-## Proje Yapısı
+## Project Structure
 
 ```
 homework2/
@@ -27,9 +27,9 @@ homework2/
 
 ---
 
-## Mimari Kararlar
+## Architecture
 
-### JWT Akışı — Access Token + Refresh Token
+### JWT Flow — Access Token + Refresh Token
 
 Sistemin tamamı iki token üzerine kuruludur:
 
@@ -42,7 +42,7 @@ Her iki token da aynı anahtarla imzalanır; `tokenType` claim'i (`"access"` vey
 
 ---
 
-### Refresh Token Neden Var?
+### Why a Refresh Token?
 
 Access token'ı kısa tutmak güvenlik açısından önemlidir: token çalınırsa zararı sınırlı kalır. Ancak kullanıcının her dakika tekrar şifre girmesini istemiyoruz. Refresh token bu ikilemyi çözer:
 
@@ -63,7 +63,7 @@ Frontend, access token'da **30 saniye kaldığında** refresh token kullanarak y
 
 ---
 
-### OAuth2 Benzeri `grant_type` Deseni
+### OAuth2-style `grant_type` Pattern
 
 Tek bir `/token` endpoint'i iki farklı akışı yönetir; `grant_type` alanına göre dallanır:
 
@@ -90,7 +90,7 @@ Bu yapı RFC 6749 (OAuth2) ile uyumludur.
 
 ---
 
-### Spring Security Filter Zinciri
+### Spring Security Filter Chain
 
 Her HTTP isteği `JwtTokenFilter`'dan geçer:
 
@@ -113,7 +113,7 @@ JwtTokenFilter
 
 ---
 
-### Katmanlı Yapı
+### Layer Structure
 
 ```
 controller/   → HTTP katmanı (AuthController, MessageController)
@@ -127,17 +127,17 @@ response/     → DTO çıkış (TokenResponse, WelcomeResponse, ErrorResponse)
 
 ---
 
-## Frontend Ekran Görüntüleri
+## Frontend Screenshots
 
-### Giriş Sayfası
+### Login Page
 
 Kullanıcı adı ve şifre ile giriş. Sayfanın altında sistemin dört aşamalı akışı özetlenir.
 
-![Giriş Sayfası](docs/screenshots/login.png)
+![Login Page](docs/screenshots/login.png)
 
 ---
 
-### Dashboard — Token Sayaçları
+### Dashboard — Token Timers
 
 Giriş sonrası access token (1 dk) ve refresh token (60 dk) için gerçek zamanlı geri sayım. Renk, kalan süreye göre yeşilden sarıya ve kırmızıya döner.
 
@@ -145,19 +145,19 @@ Giriş sonrası access token (1 dk) ve refresh token (60 dk) için gerçek zaman
 
 ---
 
-### Otomatik Yenileme — Token Aktivite Logu
+### Auto-Refresh — Token Activity Log
 
 Access token'da **30 saniye kalınca** sistem refresh token kullanarak yeni bir token çifti alır. Aktivite logu bu işlemi zaman damgasıyla kaydeder.
 
-![Otomatik Yenileme](docs/screenshots/auto-refresh.png)
+![Auto-Refresh](docs/screenshots/auto-refresh.png)
 
 ---
 
-### API Test Aracı — Kimlik Doğrulamalı vs. Doğrulamasız
+### API Tester — Authenticated vs. Unauthenticated
 
 Aynı endpoint'e iki farklı istekle karşılaştırmalı test. Sol panel geçerli access token ile `200 OK` alır; sağ panel header olmadan gönderilir ve backend `401 Unauthorized` döner.
 
-![API Test Aracı](docs/screenshots/api-tester-result.png)
+![API Tester](docs/screenshots/api-tester-result.png)
 
 ---
 
@@ -169,9 +169,9 @@ Access token browser'da decode edilerek `sub`, `tokenType`, `iss`, `iat` ve `exp
 
 ---
 
-## Kurulum ve Çalıştırma
+## Setup & Running
 
-### Gereksinimler
+### Requirements
 
 - Java 21+
 - Apache Maven 3.9+
@@ -196,7 +196,7 @@ npm run dev
 
 Frontend `http://localhost:3000` adresinde çalışır.
 
-### Test Hesabı
+### Test Account
 
 | Kullanıcı Adı | Şifre |
 |---|---|
@@ -204,14 +204,14 @@ Frontend `http://localhost:3000` adresinde çalışır.
 
 ---
 
-## API Endpoint'leri
+## API Endpoints
 
 | Method | URL | Açıklama |
 |---|---|---|
 | `POST` | `/token` | İlk giriş (`grant_type: password`) veya token yenileme (`grant_type: refresh_token`) |
 | `GET` | `/message` | Korumalı endpoint — geçerli access token gerektirir |
 
-### Örnek: İlk Giriş
+### Example: Login
 
 ```bash
 curl -s -X POST http://localhost:8083/token \
@@ -228,7 +228,7 @@ curl -s -X POST http://localhost:8083/token \
 }
 ```
 
-### Örnek: Korumalı Endpoint
+### Example: Protected Endpoint
 
 ```bash
 curl -s http://localhost:8083/message \
@@ -245,7 +245,7 @@ curl -s http://localhost:8083/message \
 }
 ```
 
-### Örnek: Token Süresi Dolmuş
+### Example: Expired Token
 
 Token olmadan ya da süresi dolmuş access token ile aynı endpoint'e gidildiğinde:
 
@@ -261,7 +261,7 @@ Token olmadan ya da süresi dolmuş access token ile aynı endpoint'e gidildiği
 
 ---
 
-## Teknolojiler
+## Technologies
 
 - **Backend**: Java 21, Spring Boot 3.5, Spring Security 6, JJWT 0.10.7
 - **Frontend**: Next.js 15 (App Router), TypeScript, Tailwind CSS, JetBrains Mono
