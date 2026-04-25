@@ -228,6 +228,8 @@ export default function DashboardPage() {
   const [jwtPayload, setJwtPayload] = useState<Record<string, string>>({});
   const isRefreshingRef = useRef(false);
 
+  const [tokenPreview, setTokenPreview] = useState("Bearer <token>");
+
   const [authResult, setAuthResult] = useState<TestResult>(null);
   const [noAuthResult, setNoAuthResult] = useState<TestResult>(null);
   const [authLoading, setAuthLoading] = useState(false);
@@ -277,6 +279,7 @@ export default function DashboardPage() {
     if (!accessToken) { router.push("/"); return; }
     setUsername(getUsername(accessToken));
     updateJwtPayload(accessToken);
+    setTokenPreview(`Bearer ${accessToken.slice(0, 24)}…`);
     getWelcomeInfo(accessToken)
       .then(setWelcomeInfo)
       .catch(() => setWelcomeInfo(null));
@@ -353,11 +356,6 @@ export default function DashboardPage() {
     clearTokens();
     router.push("/");
   }
-
-  const { accessToken } = typeof window !== "undefined" ? getTokens() : { accessToken: null };
-  const tokenPreview = accessToken
-    ? `Bearer ${accessToken.slice(0, 24)}…`
-    : "Bearer <token>";
 
   return (
     <div className="min-h-screen" style={{ background: "var(--color-bg)", fontFamily: "var(--font-body)" }}>
