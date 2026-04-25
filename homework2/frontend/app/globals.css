@@ -1,0 +1,21 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --font-display: 'Barlow Condensed', sans-serif;
+  --font-body: 'Barlow', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --color-bg: #0f0e0b;
+  --color-surface: #1a1915;
+  --color-border: #2e2c27;
+  --color-accent: #FFE500;
+  --color-text: #e8e6df;
+  --color-muted: #6b6960;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-body);
+}
